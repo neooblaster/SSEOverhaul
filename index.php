@@ -14,6 +14,10 @@
 				console.log("lancement de work ok");
 			}
 			
+			function errFn(){
+				console.error("SSE Failed");
+			}
+			
 			
 			//var MySSE = new SSE('MySEE');
 			//	MySSE.consoleOn();
@@ -25,7 +29,7 @@
 			//	MySSE.addEvent('test', worka);
 			//	MySSE.start();
 			
-			new SSE('MySSE').consoleOn().target('target.php').callback(defcallback).start();
+			new SSE('MySSE').consoleOn().target('target.php').callback(defcallback).error(errFn).start();
 			
 		</script>
 	</head>

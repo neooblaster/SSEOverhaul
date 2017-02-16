@@ -7,14 +7,18 @@
 /** ---																																						--- **
 /** ---		AUTEUR 	: Neoblaster																													--- **
 /** ---																																						--- **
-/** ---		RELEASE	: 23.05.2015																													--- **
+/** ---		RELEASE	: 16.02.2017																													--- **
 /** ---																																						--- **
-/** ---		VERSION	: 2.0																																--- **
+/** ---		VERSION	: 2.1																																--- **
 /** ---																																						--- **
 /** ---																																						--- **
 /** --- 														-----------------------------															--- **
 /** --- 															 { C H A N G E L O G } 																--- **
 /** --- 														-----------------------------															--- **
+/** ---																																						--- **
+/** ---		VERSION 2.1 : 16.02.2017																												--- **
+/** ---		------------------------																												--- **
+/** ---			- Ajout de la gestion d'erreur																									--- **
 /** ---																																						--- **
 /** ---		VERSION 2.0 : 23.05.2015																												--- **
 /** ---		------------------------																												--- **
@@ -67,8 +71,8 @@
 				start()
 				stop()
 				restart()
-				target() 	replace	setPathFile()
-				callback()	replace	setDefaultCallback()
+				target()
+				callback()
 				removeEvent()
 				getFunctionName()
 				sendLog()
@@ -76,34 +80,34 @@
 				sendError()
 				timeout_watcher()
 				workaround()
+				
 
 
 		Détails :
 		---------
 		
-		[Object]	SSE( [String] SSEName, {[String] target}, {[function] defaultCallback})
+		Object SSE (String SSEName [, String target [, Function defaultCallback]])
 		
 			IN :
-				[String] SSEName :: Nom désirée pour l'instance SSE
-				[String] target :: Chemin vers le script qu'on désire écouter
-				[Function] defaultCallback :: Function de traitement par défaut
+				String SSEName 				:: Nom désirée pour l'instance SSE
+				String target 					:: Chemin vers le script qu'on désire écouter
+				Function defaultCallback	:: Function de traitement par défaut
 				
 			OUT :
-				[Object] :: Retourne l'instance SSE
+				Object :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Créateur de l'instance SSE qui met a disposition les méthodes
 				
 				
-				
-		[Object] addEvent( [String] eventName, [Function] eventFunction)	
+		Object addEvent( String eventName, Function eventFunction)	
 		
 			IN :
-				[String] eventName :: Nom de l'évenement qui doit être strictement identique lors de l'envois de l'event-stream
-				[Function] evenFunction :: Function de traitement des données déstinée à l'évenement eventName
+				String eventName 			:: Nom de l'évenement qui doit être strictement identique lors de l'envois de l'event-stream
+				Function evenFunction	:: Function de traitement des données déstinée à l'évenement eventName
 				
 			OUT :
-				[Object] :: Retourne l'instance SSE
+				Object :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Methode d'ajout d'écouteur d'évenement personnalisé qui traitera pas la suite les données qui lui est déstinée à l'aide de la function
@@ -111,13 +115,13 @@
 				
 				
 				
-		[Object] appendEvents( )
+		Object appendEvents( Void )
 		
 			IN :
-				NONE
+				Void
 				
 			OUT :
-				[Boolean] :: Retourne l'instance SSE
+				Boolean :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Cette méthode est de catégorie "private" et n'est pas à utilisé par l'utilisateur. Elle est appelé par la méthode start() dont le but est d'ajouter concretement
@@ -125,146 +129,172 @@
 				
 				
 				
-		[Object] consoleOn( )
+		Object consoleOn( Void )
 		
 			IN :
-				NONE
+				Void
 				
 			OUT :
-				[Boolean] :: Retourne l'instance SSE
+				Boolean :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Cette méthode active les sortie console. Par défaut c'est désactivé et n'affiche que les erreurs bloquantes. Les logs et warn sont omis
 				
 				
 				
-		[Object] consoleOff( )
+		Object consoleOff( Void )
 		
 			IN :
-				NONE
+				Void
 				
 			OUT :
-				[Boolean] :: Retourne l'instance SSE
+				Boolean :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Cette méthode désactive les sortie console. Par défaut c'est désactivé et n'affiche que les erreurs bloquantes. Les logs et warn sont omis
 				
 				
 				
-		[String] getFunctionName ( [Function] functionIs )
+		String getFunctionName ( Function functionIs )
 		
 			IN :
-				[Function] functionIs :: Fonction dont il faut identifier le nom
+				Function functionIs :: Fonction dont il faut identifier le nom
 				
 			OUT :
-				[String] :: Nom de la function passé en paramètres
+				String :: Nom de la function passé en paramètres
 				
 			ROLE :
 				Obtenir le nom au format string d'une fonction de type function passée en paramètre. Le rôle de cette fonction est de type "private" et sert dans les autre méthode
 				
 				
 				
-		[Object] removeEvent ( [String] eventName )	
+		Object removeEvent ( String eventName )	
 		
 			IN :
-				[String] eventName :: Nom de l'évenement qui doit être supprimé de la liste
+				String eventName :: Nom de l'évenement qui doit être supprimé de la liste
 				
 			OUT :
-				[Object] :: Retourne l'instance SSE
+				Object :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Le rôle est de retiré un écouteur d'évenement. Si des données lui sont déstiné, il n'y aura plus de traitement du fait de sa suppression
 				
 				
 				
-		[Boolean] sendError( [String] record )
+		Boolean sendError( String record )
 		
 			IN :
-				[String] record :: Le message qu'il faut emettre en console de type 'error'
+				String record :: Le message qu'il faut emettre en console de type 'error'
 				
 			OUT :
-				[Boolean] :: Indicateur de réussite
+				Boolean :: Indicateur de réussite
 				
 			ROLE :
 				Sont rôle est d'emettre le message indiqué en paramètre. Fonctionne toujours, même si les sortie consoles sont désactivées
 				
 				
 				
-		[Object] setTimeoutDelay( [Number] delay )
+		Object setTimeoutDelay( Number delay )
 		
 			IN :
-				[Number] delay :: Delay en milliseconde qui défini un état de deconnexion
+				Number delay :: Delay en milliseconde qui défini un état de deconnexion
 				
 			OUT :
-				[Object] :: Retourne l'instance SSE
+				Object :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Sont rôle est de définir en millisecond le delays qui determine le délay entre deux réponse. Passé ce délay, une reconnexion est effectuée si non désactivé
 				
 				
 				
-		[Object] setTimeoutDelay( [Boolean] restart )
+		Object setTimeoutDelay( Boolean restart )
 		
 			IN :
-				[Boolean] restart :: Indique si on effectue une reconnexion en cas de timeout detecté
+				Boolean restart :: Indique si on effectue une reconnexion en cas de timeout detecté
 				
 			OUT :
-				[Object] :: Retourne l'instance SSE
+				Object :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Sont rôle est de définir si oui ou non il faut procéder à une reconnexion automatique en cas de perte de connexion
 				
 				
 				
-		[Boolean] sendLog( [String] record )
+		Boolean sendLog( String record )
 		
 			IN :
-				[String] record :: Le message qu'il faut emettre en console de type 'log'
+				String record :: Le message qu'il faut emettre en console de type 'log'
 				
 			OUT :
-				[Boolean] :: Indicateur de réussite
+				Boolean :: Indicateur de réussite
 				
 			ROLE :
 				Sont rôle est d'emettre le message indiqué en paramètre. Ne fonctionne que si les sortie console sont activées
 				
 				
 				
-		[Boolean] sendWarn( [String] record )
+		Boolean sendWarn( String record )
 		
 			IN :
-				[String] record :: Le message qu'il faut emettre en console de type 'warn'
+				String record :: Le message qu'il faut emettre en console de type 'warn'
 				
 			OUT :
-				[Boolean] :: Indicateur de réussite
+				Boolean :: Indicateur de réussite
 				
 			ROLE :
 				Sont rôle est d'emettre le message indiqué en paramètre. Ne fonctionne que si les sortie console sont activées
 				
 				
 				
-		[Object] stop( )
+		Object stop( Void )
 		
 			IN :
 				NONE
 				
 			OUT :
-				[Object] :: Retourne l'instance SSE
+				Object :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Mettre fin à la connexion active
 				
 				
 				
-		[Object] workaround( [Function] workaround )
+		Object workaround( Function workaround )
 		
 			IN :
-				[Function] workaround :: Fonction à executée si le navigateur ne gère pas les SSE. L'équivalent possible est une function bouclé avec appel AJAX
+				Function workaround :: Fonction à executée si le navigateur ne gère pas les SSE. L'équivalent possible est une function bouclé avec appel AJAX
 				
 			OUT :
-				[Object] :: Retourne l'instance SSE
+				Object :: Retourne l'instance SSE (this)
 				
 			ROLE :
 				Mettre fin à la connexion active
+				
+				
+				
+		Object workaround( Function workaround )
+		
+			IN :
+				Function workaround :: Fonction à executée si le navigateur ne gère pas les SSE. L'équivalent possible est une function bouclé avec appel AJAX
+				
+			OUT :
+				Object :: Retourne l'instance SSE (this)
+				
+			ROLE :
+				Mettre fin à la connexion active
+				
+				
+				
+		Object error( Function errFunction )
+		
+			IN :
+				Function errFunction :: Fonction à executée si l'execution SSE reçois une réponse erronée
+				
+			OUT :
+				Object :: Retourne l'instance SSE (this)
+				
+			ROLE :
+				Capacité à déclencher une action en cas d'erreur
 				
 
 /** ----------------------------------------------------------------------------------------------------------------------- **
@@ -275,6 +305,7 @@ function SSE(SSEName, target, defaultCallback){
 	/** -------------------------------------------------------------------- **/
 	this.SSEName = SSEName;
 	this.SSE_target = (target !== undefined) ? target : null;
+	this.SSE_error = null;
 	this.defaultCallback = (defaultCallback !== undefined) ? defaultCallback : null;
 	this.core = null;
 	this.eventsToAppend = [];
@@ -360,6 +391,18 @@ function SSE(SSEName, target, defaultCallback){
 		/** Activation des sorties "console" : true **/
 		this.consoleActivated = true;
 		this.sendLog('Activation des sorties "console".');
+		return this;
+	};
+	
+	
+	/** Méthode de configuration de la function déclenché sur Erreur SSE **/
+	this.error = function(errFunction){
+		if(typeof(errFunction) === 'function'){
+			this.SSE_error = errFunction;
+		} else {
+			console.error("Supplied argument is not a function");
+		}
+		
 		return this;
 	};
 	
@@ -528,6 +571,13 @@ function SSE(SSEName, target, defaultCallback){
 				if(this.core === null){
 					/** Initialisation **/
 					this.core = new EventSource(this.SSE_target);
+					
+					/** Gestion d'erreur si définie **/
+					if(this.SSE_error != null){
+						this.core.onerror = function(event){
+							this.SSE_error(event);
+						}.bind(this);
+					}
 					
 					/** Gestion des message **/
 					this.core.onmessage = function(event){
