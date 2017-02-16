@@ -19,6 +19,9 @@
 /** ---		VERSION 2.1 : 16.02.2017																												--- **
 /** ---		------------------------																												--- **
 /** ---			- Ajout de la gestion d'erreur																									--- **
+/** ---				>  Ajout de la méthode error() permettant de définir la callback sur erreur									--- **
+/** ---				>  Ajout d'une propriété empechant le déclenchement de la callback d'erreur alors qu'un réponse à		--- **
+/** ---					eu lieu. Propriété passe à faut sur réponse, onerror la repasse à vrai deriere							--- **
 /** ---																																						--- **
 /** ---		VERSION 2.0 : 23.05.2015																												--- **
 /** ---		------------------------																												--- **
@@ -306,6 +309,7 @@ function SSE(SSEName, target, defaultCallback){
 	this.SSEName = SSEName;
 	this.SSE_target = (target !== undefined) ? target : null;
 	this.SSE_error = null;
+	this.SSE_trigger_error = true;
 	this.defaultCallback = (defaultCallback !== undefined) ? defaultCallback : null;
 	this.core = null;
 	this.eventsToAppend = [];
@@ -575,12 +579,18 @@ function SSE(SSEName, target, defaultCallback){
 					/** Gestion d'erreur si définie **/
 					if(this.SSE_error != null){
 						this.core.onerror = function(event){
-							this.SSE_error(event);
+							if(this.SSE_trigger_error){
+							 this.SSE_error(event);
+							} else {
+								this.SSE_trigger_error = true;
+							}
 						}.bind(this);
 					}
 					
 					/** Gestion des message **/
 					this.core.onmessage = function(event){
+						this.SSE_trigger_error = false;
+						
 						if(!this.timeout_detected && this.timeout_autoDetection){
 							if(this.timeout_sample !== 0){
 								this.timeout_delay = Math.ceil(1.1 * (Date.now() - this.timeout_sample));

@@ -31,6 +31,16 @@
 			
 			new SSE('MySSE').consoleOn().target('target.php').callback(defcallback).error(errFn).start();
 			
+			//var source = new EventSource("target2.php");
+			//
+			//source.onmessage = function(event) {
+			//	console.log(event.data, this);
+			//}.bind(source);
+			//
+			//source.onerror = function(event) {
+			//    console.error("ERROR", this);
+			//}.bind(source);
+			
 		</script>
 	</head>
 	<body>
